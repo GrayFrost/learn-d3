@@ -1,6 +1,5 @@
 import React from "react";
 import * as d3 from "d3";
-import "./index.css";
 import tanImg from "./asset/image/tan.jpg";
 import neImg from "./asset/image/ne.jpg";
 import sanImg from "./asset/image/san.jpg";
