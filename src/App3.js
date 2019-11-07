@@ -26,11 +26,10 @@ class MyGraph {
         "collision",
         d3
           .forceCollide(100)
-          .strength(0.2)
-          .iterations(5)
+          .iterations(500)
+          .radius(50)
       )
-      .force("charge", d3.forceManyBody().strength(-30))
-      .alphaDecay(0.028)
+      .force("charge", d3.forceManyBody().strength(-10))
       .force("center", d3.forceCenter(this.w / 2, this.h / 2));
 
     this.nodes = this.simulation.nodes();
@@ -162,17 +161,17 @@ class MyGraph {
 
     /* Restart the force layout */
     this.simulation.alphaTarget(0.3).restart();
-    setTimeout(() => {
-      this.simulation.stop();
-    }, 100); // 先这样暂停吧，不然一直在动
+    // setTimeout(() => {
+    //   this.simulation.stop();
+    // }, 100); // 先这样暂停吧，不然一直在动
   }
 }
 
 class App extends React.Component {
   componentDidMount() {
     const nodes = [
-      { id: 1, name: "小孩", src: img1 },
-      { id: 2, name: "女生", src: img2 }
+      { id: 1, name: "小孩", src: img3 },
+      { id: 2, name: "保安", src: img1 }
     ];
     const edges = [{ source: 1, target: 2, text: "兄妹" }];
     this.graph = new MyGraph("#container");
@@ -180,16 +179,42 @@ class App extends React.Component {
   }
 
   changeData = () => {
-    const nodes = [
-      { id: 1, name: "小孩", src: img1 },
-      { id: 2, name: "女生", src: img2 },
-      { id: 3, name: "保安", src: img3 }
-    ];
+    // const nodes = [
+    //   { id: 1, name: "小孩", src: img1 },
+    //   { id: 2, name: "女生", src: img2 },
+    //   { id: 3, name: "保安", src: img3 },
+    //   { id: 4, name: "小孩2", src: img1 },
+    //   { id: 5, name: "小孩2", src: img1 },
+    //   { id: 6, name: "小孩2", src: img1 },
+    //   { id: 7, name: "小孩2", src: img1 },
+    //   { id: 8, name: "小孩2", src: img1 },
+    // ];
+    const nodes = [],
+      edges = [];
+    for (let i = 1; i < 100; i++) {
+      nodes.push({
+        id: i,
+        name: "小孩" + i,
+        src: img1
+      });
+      if (i > 1) {
+        edges.push({
+          source: 1,
+          target: i,
+          text: "123"
+        });
+      }
+    }
 
-    const edges = [
-      { source: 1, target: 2, text: "兄妹" },
-      { source: 1, target: 3, text: "兄弟" }
-    ];
+    // const edges = [
+    //   { source: 1, target: 2, text: "兄妹" },
+    //   { source: 1, target: 3, text: "兄弟" },
+    //   { source: 1, target: 4, text: "兄弟" },
+    //   { source: 1, target: 5, text: "兄弟" },
+    //   { source: 1, target: 6, text: "兄弟" },
+    //   { source: 1, target: 7, text: "兄弟" },
+    //   { source: 1, target: 8, text: "兄弟" }
+    // ];
     this.graph.update({ nodes, edges });
   };
   render() {
