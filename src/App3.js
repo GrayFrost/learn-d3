@@ -26,8 +26,8 @@ class MyGraph {
         "collision",
         d3
           .forceCollide(100)
-        //   .strength(0.2)
-        //   .iterations(5)
+          .strength(0.2)
+          .iterations(5)
       )
       .force("charge", d3.forceManyBody().strength(-30))
       .alphaDecay(0.028)
@@ -84,21 +84,50 @@ class MyGraph {
 
     circles.exit().remove();
 
+    circlesEnter.call(
+      d3
+        .drag()
+        .on("start", d => {
+          d3.event.sourceEvent.stopPropagation();
+          // restart()方法重新启动模拟器的内部计时器并返回模拟器。
+          // 与simulation.alphaTarget或simulation.alpha一起使用时，此方法可用于在交互
+          // 过程中进行“重新加热”模拟，例如在拖动节点时，在simulation.stop暂停之后恢复模拟。
+          // 当前alpha值为0，需设置alphaTarget让节点动起来
+          if (!d3.event.active) this.simulation.alphaTarget(0.3).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        })
+        .on("drag", d => {
+          // d.fx属性- 节点的固定x位置
+          // 在每次tick结束时，d.x被重置为d.fx ，并将节点 d.vx设置为零
+          // 要取消节点，请将节点 .fx和节点 .fy设置为空，或删除这些属性。
+          d.fx = d3.event.x;
+          d.fy = d3.event.y;
+        })
+        .on("end", d => {
+          // 让alpha目标值值恢复为默认值0,停止力模型
+          if (!d3.event.active) this.simulation.alphaTarget(0);
+          d.fx = null;
+          d.fy = null;
+        })
+    );
+
     // 更新线
     const edgesEnter = edges
       .enter()
       .append("path")
       .attr("class", "pathEdge")
       .attr("d", d => {
-        return d && (
+        return (
+          d &&
           "M " +
-          d.source.x +
-          " " +
-          d.source.y +
-          " L " +
-          d.target.x +
-          " " +
-          d.target.y
+            d.source.x +
+            " " +
+            d.source.y +
+            " L " +
+            d.target.x +
+            " " +
+            d.target.y
         );
       })
 
@@ -118,7 +147,7 @@ class MyGraph {
     this.simulation.on("tick", () => {
       circles.attr("cx", d => d.x).attr("cy", d => d.y);
       edges.attr("d", d => {
-        const path = 
+        const path =
           "M " +
           d.source.x +
           " " +
@@ -134,7 +163,7 @@ class MyGraph {
     /* Restart the force layout */
     this.simulation.alphaTarget(0.3).restart();
     setTimeout(() => {
-        this.simulation.stop();
+      this.simulation.stop();
     }, 100); // 先这样暂停吧，不然一直在动
   }
 }
