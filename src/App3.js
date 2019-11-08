@@ -169,13 +169,13 @@ class MyGraph {
 
 class App extends React.Component {
   componentDidMount() {
-    const nodes = [
+    this.nodes = [
       { id: 1, name: "小孩", src: img3 },
       { id: 2, name: "保安", src: img1 }
     ];
-    const edges = [{ source: 1, target: 2, text: "兄妹" }];
+    this.edges = [{ source: 1, target: 2, text: "兄妹" }];
     this.graph = new MyGraph("#container");
-    this.graph.update({ nodes, edges });
+    this.graph.update({ nodes: this.nodes, edges: this.edges });
   }
 
   changeData = () => {
@@ -189,16 +189,16 @@ class App extends React.Component {
     //   { id: 7, name: "小孩2", src: img1 },
     //   { id: 8, name: "小孩2", src: img1 },
     // ];
-    const nodes = [],
-      edges = [];
-    for (let i = 1; i < 100; i++) {
-      nodes.push({
+    this.nodes = [];
+    this.edges = [];
+    for (let i = 1; i < 10; i++) {
+      this.nodes.push({
         id: i,
         name: "小孩" + i,
         src: img1
       });
       if (i > 1) {
-        edges.push({
+        this.edges.push({
           source: 1,
           target: i,
           text: "123"
@@ -215,12 +215,30 @@ class App extends React.Component {
     //   { source: 1, target: 7, text: "兄弟" },
     //   { source: 1, target: 8, text: "兄弟" }
     // ];
-    this.graph.update({ nodes, edges });
+    this.graph.update({ nodes: this.nodes, edges: this.edges });
+  };
+
+  addData = () => {
+      console.log('zzh add data');
+    const newNodes = [
+      { id: 101, name: "女生", src: img2 },
+      { id: 102, name: "女生2", src: img2 }
+    ];
+    const newEdges = [
+      { source: 2, target: 101, text: "啊啊" },
+      { source: 2, target: 102, text: "啊啊" }
+    ];
+    
+    this.nodes = this.nodes.concat(newNodes);
+    this.edges = this.edges.concat(newEdges);
+    console.log('zzh this.nodes', this.nodes);
+    this.graph.update({ nodes: this.nodes, edges: this.edges });
   };
   render() {
     return (
       <div>
         <button onClick={this.changeData}>change data</button>
+        <button onClick={this.addData}>add data</button>
         <div id="container"></div>
       </div>
     );
