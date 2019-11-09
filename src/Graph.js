@@ -65,6 +65,7 @@ class Graph {
     this.simulation.on("tick", this.ticked.bind(this));
     this.simulation.restart();
     this.addDrag();
+    this.addZoom();
   }
 
   drawCircle() {
@@ -167,6 +168,28 @@ class Graph {
       .on("end", onDragEnd);
     const circleImage = this.gCircleLayer.selectAll("circle.circle");
     circleImage.call(drag);
+  }
+
+  addZoom() {
+    var _this = this;
+    function onZoomStart(d) {
+      // console.log('start zoom');
+    }
+    function zooming(d) {
+      // 缩放和拖拽整个g
+      _this.gEdgeLayer.attr("transform", d3.event.transform); // 获取g的缩放系数和平移的坐标值。
+      _this.gCircleLayer.attr("transform", d3.event.transform);
+    }
+    function onZoomEnd() {
+      // console.log('zoom end');
+    }
+    const zoom = d3
+      .zoom()
+      .scaleExtent([1 / 10, 10]) // 设置最大缩放比例
+      .on("start", onZoomStart)
+      .on("zoom", zooming)
+      .on("end", onZoomEnd);
+    this.svg.call(zoom);
   }
 
   // 校正位置
