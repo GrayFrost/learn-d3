@@ -66,6 +66,7 @@ class Graph {
     this.simulation.restart();
     this.addDrag();
     this.addZoom();
+    this.addHover();
   }
 
   drawCircle() {
@@ -190,6 +191,21 @@ class Graph {
       .on("zoom", zooming)
       .on("end", onZoomEnd);
     this.svg.call(zoom);
+  }
+
+  addHover() {
+    const nodeImage = this.gCircleLayer.selectAll("circle.circle");
+    nodeImage
+      .on("mouseover", d => {
+        console.log("zzh mouseover");
+        nodeImage.style('opacity', o => {
+          return 0.3;
+        })
+      })
+      .on("mouseout", d => {
+        console.log("zzh mouseout");
+        nodeImage.style('opacity', 1);
+      });
   }
 
   // 校正位置
