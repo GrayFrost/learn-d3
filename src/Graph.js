@@ -24,9 +24,12 @@ class Graph {
       .forceSimulation(this.nodes)
       .force(
         "link",
-        d3.forceLink(this.edges).id(function(d) {
-          return d.id;
-        }).distance(200)
+        d3
+          .forceLink(this.edges)
+          .id(function(d) {
+            return d.id;
+          })
+          .distance(200)
       )
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(opts.width / 2, opts.height / 2));
@@ -63,6 +66,12 @@ class Graph {
   drawCircle() {
     console.log("画节点", this.nodes);
     this.drawCircleFillPattern();
+    this.drawCircleImage();
+
+    // 重新注册节点
+    this.simulation.nodes(this.nodes);
+  }
+  drawCircleImage() {
     let circle = this.gCircleLayer.selectAll("circle.circle");
     circle = circle.data(this.nodes, d => d.id);
     circle.exit().remove();
@@ -75,7 +84,6 @@ class Graph {
       .attr("stroke", "#ccf1fc")
       .attr("stroke-width", 2)
       .attr("r", 25);
-    this.simulation.nodes(this.nodes);
   }
   drawCircleFillPattern() {
     let imagePattern = this.defs.selectAll("pattern.imagePattern");
@@ -103,6 +111,16 @@ class Graph {
   }
   drawEdge() {
     console.log("画线", this.edges);
+    this.drawEdgeLine();
+
+    // 重新注册线
+    this.simulation
+      .force("link")
+      .links(this.edges)
+      .id(d => d.id);
+  }
+
+  drawEdgeLine() {
     let edge = this.gEdgeLayer.selectAll("path.pathEdge");
     edge = edge.data(this.edges, d => {
       return d.source.id + "-" + d.target.id;
@@ -115,14 +133,10 @@ class Graph {
       .merge(edge)
       .attr("stroke", "#f00")
       .attr("stroke-width", 2)
-      .attr('stroke-dasharray', "5 5")
-
-    this.simulation
-      .force("link")
-      .links(this.edges)
-      .id(d => d.id);
+      .attr("stroke-dasharray", "5 5");
   }
 
+  // 校正位置
   ticked() {
     console.log("this tickedd");
     let edge = this.gEdgeLayer.selectAll("path.pathEdge");
