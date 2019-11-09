@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 
 class Graph {
+  linkedByIndex = {};
   constructor(selector, data, options) {
     const defaultOptions = {
       width: 1000,
@@ -121,6 +122,11 @@ class Graph {
 
   drawEdge() {
     console.log("画线", this.edges);
+    // 统计关联节点
+    this.edges.forEach(d => {
+      this.linkedByIndex[d.source.index + "," + d.target.index] = 1;
+    });
+
     this.drawEdgeLine();
 
     // 重新注册线
@@ -128,6 +134,14 @@ class Graph {
       .force("link")
       .links(this.edges)
       .id(d => d.id);
+  }
+
+  isConnected(a, b) {
+    return (
+      this.linkedByIndex[a.index + "," + b.index] ||
+      this.linkedByIndex[b.index + "," + a.index] ||
+      a.index === b.index
+    );
   }
 
   drawEdgeLine() {
@@ -184,6 +198,7 @@ class Graph {
       // 缩放和拖拽整个g
       _this.gEdgeLayer.attr("transform", d3.event.transform); // 获取g的缩放系数和平移的坐标值。
       _this.gCircleLayer.attr("transform", d3.event.transform);
+      _this.gImageLayer.attr("transform", d3.event.transform);
     }
     function onZoomEnd() {
       // console.log('zoom end');
@@ -198,26 +213,23 @@ class Graph {
   }
 
   addHover() {
+    let _this = this;
     const nodeImage = this.gImageLayer.selectAll("image.imageCircle");
     nodeImage
       .on("mouseover", d => {
-        console.log("zzh mouseover");
         nodeImage.style("opacity", o => {
-          return 0.3;
+          return this.isConnected(d, o) ? 0.3 : 1;
         });
       })
       .on("mouseout", d => {
-        console.log("zzh mouseout");
         nodeImage.style("opacity", 1);
       });
   }
 
   // 校正位置
   ticked() {
-    console.log("this tickedd");
     let edge = this.gEdgeLayer.selectAll("path.pathEdge");
     edge.attr("d", d => {
-      console.log("zzh edge dddd", d);
       return (
         "M " +
         d.source.x +
