@@ -5,6 +5,10 @@ import img2 from "./asset/image/san.jpg";
 import img3 from "./asset/image/ino.jpg";
 
 class App extends React.Component {
+  nodes = null;
+  edges = null;
+  highlightActive = false;
+  allNodes = null;
   componentDidMount() {
     const imgArr = [img1, img2, img3];
     const nodesData = [];
@@ -13,21 +17,25 @@ class App extends React.Component {
     for (var i = 1; i < 10; i++) {
       nodesData.push({
         id: i,
-        label: `Node ${i}`,
+        // label: `Node ${i}`,
         image: imgArr[i % 3]
       });
       if (i > 1) {
         edgesData.push({
+          id: i,
           from: 1,
-          to: i
+          to: i,
+          label: 'edge ' + i
         });
       }
     }
     var nodes = new vis.DataSet(nodesData);
+    this.nodes = nodes;
 
     var edges = new vis.DataSet(edgesData);
-
+    this.edges = edges;
     var container = document.querySelector("#container");
+    console.log('zzh nodes, edges', nodes, edges);
     var data = {
       nodes,
       edges
@@ -35,22 +43,58 @@ class App extends React.Component {
     var options = {
       nodes: {
         shape: "circularImage",
-        borderWidth: 2,
+        borderWidth: 5,
         size: 50,
         color: {
-          border: "green",
-          background: "#666666"
+          border: "orange",
+          background: "#666666",
+        },
+        chosen: {
+          node: (values, id, selected, hovering) => {
+            // console.log('choose node', values, id, selected, hovering);
+          }
         }
       },
       edges: {
         dashes: true,
-        color: "orange",
+        color: "blue",
         length: 200,
-        smooth: false
+        smooth: false,
+        font: {
+          align: 'horizontal',
+          color: 'blue'
+        },
+        chosen: {
+          label: (values, id, selected, hovering) =>{
+            // console.log('choose label', values, id, selected, hovering);
+            values.color = 'orange';
+          }
+        }
+      },
+      interaction: {
+        hover: true
       }
     };
-    var network = new vis.Network(container, data, options);
+    this.network = new vis.Network(container, data, options);
+    this.allNodes = nodes.get({returnType: 'Object'});
+    this.network.on('click', this.neighborHighlight)
   }
+
+  neighborHighlight = (params) => {
+    if(params.nodes.length > 0){
+      this.highlightActive = true;
+      
+      var selectedNode = params.nodes[0];
+      console.log('selectednode', selectedNode);
+      var connectedNodes = this.network.getConnectedNodes(selectedNode);
+      console.log('connectedNode', connectedNodes);
+      console.log('zzh allnode', this.allNodes);
+      for(let i = 0; i< connectedNodes.length; i++){
+        this.allNodes[connectedNodes[i]].color = 'red';
+      }
+    }
+  }
+  
   render() {
     return <div id="container" style={{ width: 1000, height: 800 }}></div>;
   }
