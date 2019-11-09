@@ -29,6 +29,7 @@ class MyGraph {
           .iterations(500)
           .radius(50)
       )
+      .velocityDecay(0.8)
       .force("charge", d3.forceManyBody().strength(-10))
       .force("center", d3.forceCenter(this.w / 2, this.h / 2));
 
@@ -47,7 +48,7 @@ class MyGraph {
     let circles = this.gCircle.selectAll("circle.circle").data(newNodes);
 
     const imagePattern = this.defs
-      .selectAll("defs.imagePattern")
+      .selectAll("pattern.imagePattern")
       .data(newNodes);
 
     const imagePatternEnter = imagePattern
