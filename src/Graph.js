@@ -4,9 +4,10 @@ class Graph {
   constructor(selector, data, options) {
     const defaultOptions = {
       width: 1000,
-      height: 800
+      height: 800,
+      radius: 50 // 图片半径
     };
-    const opts = Object.assign({}, defaultOptions, options);
+    this.opts = Object.assign({}, defaultOptions, options);
 
     var { nodes, edges } = data;
     this.nodes = nodes;
@@ -16,8 +17,8 @@ class Graph {
     this.svg = d3
       .select(selector)
       .append("svg")
-      .attr("width", opts.width)
-      .attr("height", opts.height);
+      .attr("width", this.opts.width)
+      .attr("height", this.opts.height);
 
     // 生成力模型
     this.simulation = d3
@@ -31,8 +32,10 @@ class Graph {
           })
           .distance(200)
       )
-      .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(opts.width / 2, opts.height / 2));
+      .force(
+        "center",
+        d3.forceCenter(this.opts.width / 2, this.opts.height / 2)
+      );
 
     // 公共defs
     this.defs = this.svg.append("defs");
@@ -83,7 +86,7 @@ class Graph {
       .attr("fill", d => `url(#avatar${d.id})`)
       .attr("stroke", "#ccf1fc")
       .attr("stroke-width", 2)
-      .attr("r", 25);
+      .attr("r", this.opts.radius);
   }
   drawCircleFillPattern() {
     let imagePattern = this.defs.selectAll("pattern.imagePattern");
@@ -105,8 +108,8 @@ class Graph {
       .append("image")
       .attr("class", "imageInPattern")
       .attr("xlink:href", d => d.src)
-      .attr("height", 50)
-      .attr("width", 50)
+      .attr("height", this.opts.radius * 2)
+      .attr("width", this.opts.radius * 2)
       .attr("preserveAspectRatio", "xMidYMin slice");
   }
   drawEdge() {
@@ -130,7 +133,6 @@ class Graph {
       .enter()
       .append("path")
       .attr("class", "pathEdge")
-      .merge(edge)
       .attr("stroke", "#f00")
       .attr("stroke-width", 2)
       .attr("stroke-dasharray", "5 5");
@@ -141,6 +143,7 @@ class Graph {
     console.log("this tickedd");
     let edge = this.gEdgeLayer.selectAll("path.pathEdge");
     edge.attr("d", d => {
+      console.log('zzh edge dddd', d);
       return (
         "M " +
         d.source.x +
