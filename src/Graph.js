@@ -45,7 +45,18 @@ class Graph {
     this.gEdgeLayer = this.svg.append("g").attr("class", "gEdgeLayer");
 
     // 管理节点的容器g
-    this.gCircleLayer = this.svg.append("g").attr("ckass", "gCircleLayer");
+    this.gCircleLayer = this.svg.append("g").attr("class", "gCircleLayer");
+
+    this.gImageLayer = this.svg.append("g").attr("class", "gImageLayer");
+
+    // 图片裁剪
+    const imageRound = this.defs
+      .append("clipPath")
+      .attr("id", "avatar-clip")
+      .append("circle")
+      .attr("cx", 0)
+      .attr("cy", 0)
+      .attr("r", this.opts.radius);
 
     // 画内容
     this.draw();
@@ -71,13 +82,13 @@ class Graph {
 
   drawCircle() {
     console.log("画节点", this.nodes);
-    this.drawCircleFillPattern();
+    this.drawCircleNode();
     this.drawCircleImage();
 
     // 重新注册节点
     this.simulation.nodes(this.nodes);
   }
-  drawCircleImage() {
+  drawCircleNode() {
     let circle = this.gCircleLayer.selectAll("circle.circle");
     circle = circle.data(this.nodes, d => d.id);
     circle.exit().remove();
@@ -86,35 +97,28 @@ class Graph {
       .enter()
       .append("circle")
       .attr("class", "circle")
-      .attr("fill", d => `url(#avatar${d.id})`)
+      .style("fill", "#fff")
       .attr("stroke", "#ccf1fc")
       .attr("stroke-width", 2)
-      .attr("r", this.opts.radius);
+      .attr("r", this.opts.radius + 2);
   }
-  drawCircleFillPattern() {
-    let imagePattern = this.defs.selectAll("pattern.imagePattern");
-    imagePattern = imagePattern.data(this.nodes);
-    imagePattern.exit().remove();
-    imagePattern = imagePattern
-      .enter()
-      .append("pattern")
-      .attr("class", "imagePattern")
-      .attr("id", d => `avatar${d.id}`)
-      .attr("patternUnits", "objectBoundingBox")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", "1")
-      .attr("height", "1");
+  drawCircleImage() {
+    let image = this.gImageLayer.selectAll("image.imageCircle");
+    image = image.data(this.nodes);
+    image.exit().remove();
 
-    // 将图片放在pattern中，circle通过fill的方式填充图片
-    imagePattern
+    image = image
+      .enter()
       .append("image")
-      .attr("class", "imageInPattern")
+      .attr("class", "imageCircle")
       .attr("xlink:href", d => d.src)
-      .attr("height", this.opts.radius * 2)
+      .attr("x", -this.opts.radius)
+      .attr("y", -this.opts.radius)
       .attr("width", this.opts.radius * 2)
-      .attr("preserveAspectRatio", "xMidYMin slice");
+      .attr("height", this.opts.radius * 2)
+      .attr("clip-path", "url(#avatar-clip)");
   }
+
   drawEdge() {
     console.log("画线", this.edges);
     this.drawEdgeLine();
@@ -136,7 +140,7 @@ class Graph {
       .enter()
       .append("path")
       .attr("class", "pathEdge")
-      .attr("stroke", "#f00")
+      .attr("stroke", "#00f")
       .attr("stroke-width", 2)
       .attr("stroke-dasharray", "5 5");
   }
@@ -167,7 +171,7 @@ class Graph {
       .on("start", onDragStart)
       .on("drag", dragging)
       .on("end", onDragEnd);
-    const circleImage = this.gCircleLayer.selectAll("circle.circle");
+    const circleImage = this.gImageLayer.selectAll("image.imageCircle");
     circleImage.call(drag);
   }
 
@@ -194,17 +198,17 @@ class Graph {
   }
 
   addHover() {
-    const nodeImage = this.gCircleLayer.selectAll("circle.circle");
+    const nodeImage = this.gImageLayer.selectAll("image.imageCircle");
     nodeImage
       .on("mouseover", d => {
         console.log("zzh mouseover");
-        nodeImage.style('opacity', o => {
+        nodeImage.style("opacity", o => {
           return 0.3;
-        })
+        });
       })
       .on("mouseout", d => {
         console.log("zzh mouseout");
-        nodeImage.style('opacity', 1);
+        nodeImage.style("opacity", 1);
       });
   }
 
@@ -226,8 +230,13 @@ class Graph {
       );
     });
 
-    let circle = this.gCircleLayer.selectAll("circle.circle");
-    circle.attr("cx", d => d.x).attr("cy", d => d.y);
+    let nodeCircle = this.gCircleLayer.selectAll("circle.circle");
+    nodeCircle.attr("cx", d => d.x).attr("cy", d => d.y);
+
+    let nodeImage = this.gImageLayer.selectAll("image.imageCircle");
+    nodeImage.attr("transform", d => {
+      return "translate(" + d.x + "," + d.y + ")";
+    });
   }
 }
 
