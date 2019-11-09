@@ -1,34 +1,58 @@
-import React from 'react';
-import vis from 'vis-network';
+import React from "react";
+import vis from "vis-network";
+import img1 from "./asset/image/tan.jpg";
+import img2 from "./asset/image/san.jpg";
+import img3 from "./asset/image/ino.jpg";
 
-class App  extends React.Component {
-  componentDidMount(){
-    var nodes = new vis.DataSet([
-      {id: 1, label: 'Node 1'},
-    {id: 2, label: 'Node 2'},
-    {id: 3, label: 'Node 3'},
-    {id: 4, label: 'Node 4'},
-    {id: 5, label: 'Node 5'}
-    ]);
+class App extends React.Component {
+  componentDidMount() {
+    const imgArr = [img1, img2, img3];
+    const nodesData = [];
+    const edgesData = [];
 
-    var edges = new vis.DataSet([
-      {from: 1, to: 3},
-      {from: 1, to: 2},
-      {from: 2, to: 4},
-      {from: 2, to: 5},
-      {from: 3, to: 5}
-    ]);
+    for (var i = 1; i < 10; i++) {
+      nodesData.push({
+        id: i,
+        label: `Node ${i}`,
+        image: imgArr[i % 3]
+      });
+      if (i > 1) {
+        edgesData.push({
+          from: 1,
+          to: i
+        });
+      }
+    }
+    var nodes = new vis.DataSet(nodesData);
 
-    var container = document.querySelector('#container');
+    var edges = new vis.DataSet(edgesData);
+
+    var container = document.querySelector("#container");
     var data = {
       nodes,
-      edges,
-    }
-    var options = {}
+      edges
+    };
+    var options = {
+      nodes: {
+        shape: "circularImage",
+        borderWidth: 2,
+        size: 50,
+        color: {
+          border: "green",
+          background: "#666666"
+        }
+      },
+      edges: {
+        dashes: true,
+        color: "orange",
+        length: 200,
+        smooth: false
+      }
+    };
     var network = new vis.Network(container, data, options);
   }
-  render(){
-    return <div id="container" style={{width: 1000, height: 800}}></div>
+  render() {
+    return <div id="container" style={{ width: 1000, height: 800 }}></div>;
   }
 }
 export default App;
