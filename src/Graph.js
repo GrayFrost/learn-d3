@@ -114,7 +114,8 @@ class Graph {
       .attr("class", "pathEdge")
       .merge(edge)
       .attr("stroke", "#f00")
-      .attr("stroke-width", 2);
+      .attr("stroke-width", 2)
+      .attr('stroke-dasharray', "5 5")
 
     this.simulation
       .force("link")
