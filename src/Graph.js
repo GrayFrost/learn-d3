@@ -64,6 +64,7 @@ class Graph {
     this.drawEdge();
     this.simulation.on("tick", this.ticked.bind(this));
     this.simulation.restart();
+    this.addDrag();
   }
 
   drawCircle() {
@@ -138,12 +139,42 @@ class Graph {
       .attr("stroke-dasharray", "5 5");
   }
 
+  addDrag() {
+    var _this = this;
+    function onDragStart(d) {
+      d3.event.sourceEvent.stopPropagation();
+      if (!d3.event.active) {
+        _this.simulation.alphaTarget(1).restart();
+      }
+    }
+
+    function dragging(d) {
+      d.fx = d3.event.x;
+      d.fy = d3.event.y;
+    }
+
+    function onDragEnd(d) {
+      // 让alpha目标值值恢复为默认值0,停止力模型
+      if (!d3.event.active) _this.simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+
+    const drag = d3
+      .drag()
+      .on("start", onDragStart)
+      .on("drag", dragging)
+      .on("end", onDragEnd);
+    const circleImage = this.gCircleLayer.selectAll("circle.circle");
+    circleImage.call(drag);
+  }
+
   // 校正位置
   ticked() {
     console.log("this tickedd");
     let edge = this.gEdgeLayer.selectAll("path.pathEdge");
     edge.attr("d", d => {
-      console.log('zzh edge dddd', d);
+      console.log("zzh edge dddd", d);
       return (
         "M " +
         d.source.x +
