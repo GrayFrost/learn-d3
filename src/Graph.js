@@ -31,7 +31,7 @@ class Graph {
           .id(function(d) {
             return d.id;
           })
-          .distance(200)
+          .distance(300)
       )
       .force(
         "center",
@@ -215,14 +215,20 @@ class Graph {
   addHover() {
     let _this = this;
     const nodeImage = this.gImageLayer.selectAll("image.imageCircle");
+    const edgeLine = this.gEdgeLayer.selectAll("path.pathEdge");
     nodeImage
       .on("mouseover", d => {
         nodeImage.style("opacity", o => {
           return this.isConnected(d, o) ? 0.3 : 1;
         });
+
+        edgeLine.style("stroke-opacity", o => {
+          return o.source === d || o.target === d ? 0.3 : 1;
+        });
       })
       .on("mouseout", d => {
         nodeImage.style("opacity", 1);
+        edgeLine.style("stroke-opacity", 1);
       });
   }
 

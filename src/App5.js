@@ -43,8 +43,10 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.addData}> add data</button>
-        <div id="container" style={{ width: 1000, height: 800 }}></div>
+        <div style={{position: 'fixed', top: 0}}>
+          <button onClick={this.addData}> add data</button>
+        </div>
+        <div id="container" style={{ width: 1000, height: 600 }}></div>
       </div>
     );
   }
