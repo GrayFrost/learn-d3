@@ -37,8 +37,9 @@ class Graph {
         "center",
         d3.forceCenter(this.opts.width / 2, this.opts.height / 2)
       )
-      .velocityDecay(0.8)//范围0-1，较低的衰减率可以迭代更多次，使布局更合理，但会导致更多的震荡，类似阻力。
-      .force('charge', d3.forceManyBody().strength(-1000)).force('collision', d3.forceCollide());
+      .velocityDecay(0.8) //范围0-1，较低的衰减率可以迭代更多次，使布局更合理，但会导致更多的震荡，类似阻力。
+      .force("charge", d3.forceManyBody().strength(-1000))
+      .force("collision", d3.forceCollide());
 
     // 公共defs
     this.defs = this.svg.append("defs");
@@ -46,6 +47,8 @@ class Graph {
     // 管理线的容器g，确保这个g在节点的g之前渲染
     // 因为渲染是按顺序的，这样线才不会覆盖节点
     this.gEdgeLayer = this.svg.append("g").attr("class", "gEdgeLayer");
+
+    this.gEdgeTextLayer = this.svg.append("g").attr("class", "gEdgeTextLayer");
 
     // 管理节点的容器g
     this.gCircleLayer = this.svg.append("g").attr("class", "gCircleLayer");
@@ -77,7 +80,7 @@ class Graph {
     this.drawCircle();
     this.drawEdge();
     this.simulation.on("tick", this.ticked.bind(this));
-    this.simulation.alpha(1).restart();//重启时要设置alpha值，不然像死鱼一样
+    this.simulation.alpha(1).restart(); //重启时要设置alpha值，不然像死鱼一样
     this.addDrag();
     this.addZoom();
     this.addHover();
@@ -130,6 +133,7 @@ class Graph {
     });
 
     this.drawEdgeLine();
+    this.drawEdgeText();
 
     // 重新注册线
     this.simulation
@@ -146,15 +150,41 @@ class Graph {
     );
   }
 
+  // 求两点之间的距离
+  getDis(s, t) {
+    return Math.sqrt((s.x - t.x) * (s.x - t.x) + (s.y - t.y) * (s.y - t.y));
+  }
+
+  drawEdgeText() {
+    let _this = this;
+    let text = this.gEdgeTextLayer.selectAll("text.edgeText");
+    text = text.data(this.edges);
+    text.exit().remove();
+    text = text
+      .enter()
+      .append("text")
+      .attr("class", "edgeText")
+      .attr("stroke", "blue")
+      .attr("text-anchor", "middle")
+      .append("textPath")
+      .attr("xlink:href", (d, i) => {
+        return `#edgepath${i}`;
+      })
+      .text(d => {
+        return d.count;
+      });
+  }
+
   drawEdgeLine() {
     let edge = this.gEdgeLayer.selectAll("path.pathEdge");
-    edge = edge.data(this.edges, d => {
-      return d.source.id + "-" + d.target.id;
-    });
+    edge = edge.data(this.edges);
     edge.exit().remove();
     edge = edge
       .enter()
       .append("path")
+      .attr("id", (d, i) => {
+        return `edgepath${i}`;
+      })
       .attr("class", "pathEdge")
       .attr("stroke", "#00f")
       .attr("stroke-width", 2)
@@ -193,18 +223,14 @@ class Graph {
 
   addZoom() {
     var _this = this;
-    function onZoomStart(d) {
-      // console.log('start zoom');
-    }
+    function onZoomStart(d) {}
     function zooming(d) {
       // 缩放和拖拽整个g
       _this.gEdgeLayer.attr("transform", d3.event.transform); // 获取g的缩放系数和平移的坐标值。
       _this.gCircleLayer.attr("transform", d3.event.transform);
       _this.gImageLayer.attr("transform", d3.event.transform);
     }
-    function onZoomEnd() {
-      // console.log('zoom end');
-    }
+    function onZoomEnd() {}
     const zoom = d3
       .zoom()
       .scaleExtent([1 / 10, 10]) // 设置最大缩放比例
@@ -236,6 +262,7 @@ class Graph {
 
   // 校正位置
   ticked() {
+    let _this = this;
     let edge = this.gEdgeLayer.selectAll("path.pathEdge");
     edge.attr("d", d => {
       return (
@@ -249,6 +276,12 @@ class Graph {
         d.target.y
       );
     });
+
+    // 设置边上的文字居中
+    let text = this.gEdgeTextLayer.selectAll("text.edgeText");
+    text.attr("x", d => {
+      return _this.getDis(d.source, d.target) / 2;
+    }).attr('dy', 20);// 距离线一定距离，不要粘着
 
     let nodeCircle = this.gCircleLayer.selectAll("circle.circle");
     nodeCircle.attr("cx", d => d.x).attr("cy", d => d.y);

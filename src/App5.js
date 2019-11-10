@@ -12,7 +12,7 @@ class App extends React.Component {
       { id: 1, name: "小孩", src: img1 },
       { id: 2, name: "保安", src: img3 }
     ];
-    this.edges = [{ id: 1, source: 1, target: 2 }];
+    this.edges = [{ id: 1, source: 1, target: 2, count: 10 }];
     this.graph = new Graph(
       "#container",
       {
@@ -32,7 +32,8 @@ class App extends React.Component {
     this.edges.push({
       id: this.count,
       source: 1,
-      target: this.count + 1
+      target: this.count + 1,
+      count: 12
     });
     this.graph.update({
       nodes: this.nodes,
@@ -44,7 +45,7 @@ class App extends React.Component {
   addManyData = () => {
     let newNodes = [];
     let newEdges = [];
-    for (var i = 1; i < 100; i++) {
+    for (var i = 1; i < 10; i++) {
       newNodes.push({
         id: i,
         name: "node" + i,
@@ -55,7 +56,8 @@ class App extends React.Component {
           id: i,
           text: "edge" + i,
           source: 1,
-          target: i
+          target: i,
+          count: Math.ceil(Math.random() * 10)
         });
       }
     }
