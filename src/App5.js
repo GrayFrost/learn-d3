@@ -3,10 +3,10 @@ import Graph from "./Graph";
 import img1 from "./asset/image2/1.jpg";
 import img2 from "./asset/image2/2.jpg";
 import img3 from "./asset/image2/3.jpg";
-import * as d3 from "d3";
 
 class App extends React.Component {
   count = 2;
+  imageArr = [img1, img2, img3];
   componentDidMount() {
     this.nodes = [
       { id: 1, name: "小孩", src: img1 },
@@ -40,11 +40,36 @@ class App extends React.Component {
     });
     this.count++;
   };
+
+  addManyData = () => {
+    let newNodes = [];
+    let newEdges = [];
+    for (var i = 1; i < 100; i++) {
+      newNodes.push({
+        id: i,
+        name: "node" + i,
+        src: this.imageArr[i % 3]
+      });
+      if (i > 1) {
+        newEdges.push({
+          id: i,
+          text: "edge" + i,
+          source: 1,
+          target: i
+        });
+      }
+    }
+    this.graph.update({
+      nodes: newNodes,
+      edges: newEdges
+    });
+  };
   render() {
     return (
       <div>
-        <div style={{position: 'fixed', top: 0}}>
+        <div style={{ position: "fixed", top: 0 }}>
           <button onClick={this.addData}> add data</button>
+          <button onClick={this.addManyData}> add many data</button>
         </div>
         <div id="container" style={{ width: 1000, height: 600 }}></div>
       </div>

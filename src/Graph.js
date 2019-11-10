@@ -36,7 +36,9 @@ class Graph {
       .force(
         "center",
         d3.forceCenter(this.opts.width / 2, this.opts.height / 2)
-      );
+      )
+      .velocityDecay(0.8)//范围0-1，较低的衰减率可以迭代更多次，使布局更合理，但会导致更多的震荡，类似阻力。
+      .force('charge', d3.forceManyBody().strength(-1000)).force('collision', d3.forceCollide());
 
     // 公共defs
     this.defs = this.svg.append("defs");
@@ -75,7 +77,7 @@ class Graph {
     this.drawCircle();
     this.drawEdge();
     this.simulation.on("tick", this.ticked.bind(this));
-    this.simulation.restart();
+    this.simulation.alpha(1).restart();//重启时要设置alpha值，不然像死鱼一样
     this.addDrag();
     this.addZoom();
     this.addHover();
