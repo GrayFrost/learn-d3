@@ -231,6 +231,7 @@ class Graph {
     function zooming(d) {
       // 缩放和拖拽整个g
       _this.gEdgeLayer.attr("transform", d3.event.transform); // 获取g的缩放系数和平移的坐标值。
+      _this.gEdgeTextLayer.attr("transform", d3.event.transform);
       _this.gCircleLayer.attr("transform", d3.event.transform);
       _this.gImageLayer.attr("transform", d3.event.transform);
     }
@@ -286,15 +287,7 @@ class Graph {
       .attr("x", d => {
         return _this.getDis(d.source, d.target) / 2;
       })
-      .attr("dy", 20); // 距离线一定距离，不要粘着
-    // .attr("transform", d => {
-    //   if (d.target.x < d.source.x) {
-    //     var x = _this.getDis(d.source, d.target) / 2;
-    //     return "rotate(180 " + x + " " + 0 + ")";
-    //   } else {
-    //     return "rotate(0)";
-    //   }
-    // });
+      .attr("dy", -10) // 距离线一定距离，不要粘着
 
     let nodeCircle = this.gCircleLayer.selectAll("circle.circle");
     nodeCircle.attr("cx", d => d.x).attr("cy", d => d.y);
