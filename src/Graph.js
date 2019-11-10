@@ -56,7 +56,7 @@ class Graph {
     this.gImageLayer = this.svg.append("g").attr("class", "gImageLayer");
 
     // 图片裁剪
-    const imageRound = this.defs
+    this.defs
       .append("clipPath")
       .attr("id", "avatar-clip")
       .append("circle")
@@ -156,7 +156,6 @@ class Graph {
   }
 
   drawEdgeText() {
-    let _this = this;
     let text = this.gEdgeTextLayer.selectAll("text.edgeText");
     text = text.data(this.edges);
     text.exit().remove();
@@ -172,6 +171,11 @@ class Graph {
       })
       .text(d => {
         return d.count;
+      })
+      .on("click", d => {
+        text.style("stroke", o => {
+          return d.id === o.id ? "orange" : "blue";
+        });
       });
   }
 
@@ -241,7 +245,6 @@ class Graph {
   }
 
   addHover() {
-    let _this = this;
     const nodeImage = this.gImageLayer.selectAll("image.imageCircle");
     const edgeLine = this.gEdgeLayer.selectAll("path.pathEdge");
     nodeImage
@@ -279,9 +282,19 @@ class Graph {
 
     // 设置边上的文字居中
     let text = this.gEdgeTextLayer.selectAll("text.edgeText");
-    text.attr("x", d => {
-      return _this.getDis(d.source, d.target) / 2;
-    }).attr('dy', 20);// 距离线一定距离，不要粘着
+    text
+      .attr("x", d => {
+        return _this.getDis(d.source, d.target) / 2;
+      })
+      .attr("dy", 20); // 距离线一定距离，不要粘着
+    // .attr("transform", d => {
+    //   if (d.target.x < d.source.x) {
+    //     var x = _this.getDis(d.source, d.target) / 2;
+    //     return "rotate(180 " + x + " " + 0 + ")";
+    //   } else {
+    //     return "rotate(0)";
+    //   }
+    // });
 
     let nodeCircle = this.gCircleLayer.selectAll("circle.circle");
     nodeCircle.attr("cx", d => d.x).attr("cy", d => d.y);
