@@ -124,7 +124,7 @@ class Graph {
       gCircle.append('image')
       .attr('xlink:href', (d) => {
         return d.icons && d.icons[0] ? d.icons[0].src : ''
-      }).attr();
+      });
       gCircle.append('image')
       .attr('xlink:href', (d) => {
         return d.icons && d.icons[1] ? d.icons[1].src : ''
