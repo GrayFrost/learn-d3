@@ -124,11 +124,11 @@ class Graph {
       gCircle.append('image')
       .attr('xlink:href', (d) => {
         return d.icons && d.icons[0] ? d.icons[0].src : ''
-      });
+      }).attr('y', 30);
       gCircle.append('image')
       .attr('xlink:href', (d) => {
         return d.icons && d.icons[1] ? d.icons[1].src : ''
-      }).attr('x', 30).attr('y', 0);
+      }).attr('x', 30).attr('y', 30);
   }
   drawCircleImage() {
     let image = this.gImageLayer.selectAll("image.imageCircle");
