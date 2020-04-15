@@ -305,9 +305,13 @@ class Graph {
     let text = this.gEdgeTextLayer.selectAll("text.edgeText");
     text
       .attr("x", d => {
+        console.log('zzh text d', d);
         return _this.getDis(d.source, d.target) / 2;
       })
-      .attr("dy", -10) // 距离线一定距离，不要粘着
+      .attr("dy", d => {
+        console.log('zzh text dy', d);
+        return d.index%2 === 0 ? -10 : 20;
+      }) // 距离线一定距离，不要粘着
 
     let gCircle = this.gCircleLayer.selectAll('g.circleWrap');
     gCircle.attr('transform', d=> {
