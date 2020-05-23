@@ -1,12 +1,13 @@
 import React from "react";
-import Graph from "./Graph-add-icon";
-import img1 from "./asset/image2/1.jpg";
-import img2 from "./asset/image2/2.jpg";
-import img3 from "./asset/image2/3.jpg";
-import svg1 from "./asset/svg/icon-huji.svg";
-import svg2 from "./asset/svg/icon-wz.svg";
+import Graph from "./graph";
+import { Button } from "antd";
+import img1 from "../../asset/image2/1.jpg";
+import img2 from "../../asset/image2/2.jpg";
+import img3 from "../../asset/image2/3.jpg";
+import svg1 from "../../asset/svg/icon-huji.svg";
+import svg2 from "../../asset/svg/icon-wz.svg";
 
-class App extends React.Component {
+class AddIcon extends React.Component {
     count = 2;
     imageArr = [img1, img2, img3];
     componentDidMount() {
@@ -19,10 +20,7 @@ class App extends React.Component {
             },
             { id: 2, name: "保安", src: img3, icons: [{ src: svg2 }] },
         ];
-        this.edges = [
-            { id: 1, source: 1, target: 2, count: 10 },
-            { id: 2, source: 1, target: 2, count: 20 },
-        ];
+        this.edges = [{ id: 1, source: 1, target: 2, count: 10 }];
         this.graph = new Graph(
             "#container",
             {
@@ -45,12 +43,6 @@ class App extends React.Component {
             target: this.count + 1,
             count: 12,
         });
-        this.edges.push({
-          id: this.count+ Math.random(),
-          source: 1,
-          target: this.count + 1,
-          count: 50
-        })
         this.graph.update({
             nodes: this.nodes,
             edges: this.edges,
@@ -85,14 +77,19 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <div style={{ position: "fixed", top: 0 }}>
-                    <button onClick={this.addData}> add data</button>
-                    <button onClick={this.addManyData}> add many data</button>
-                </div>
+                <Button.Group>
+                    <Button onClick={this.addData} type="primary">
+                        add data
+                    </Button>
+                    <Button onClick={this.addManyData} type="primary">
+                        add many data
+                    </Button>
+                </Button.Group>
+
                 <div id="container" style={{ width: 1000, height: 600 }}></div>
             </div>
         );
     }
 }
 
-export default App;
+export default AddIcon;

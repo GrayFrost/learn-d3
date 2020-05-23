@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { eventEmitter } from "./Event";
+import { eventEmitter } from "../../utils/Event";
 
 class Graph {
     linkedByIndex = {};

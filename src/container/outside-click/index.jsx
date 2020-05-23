@@ -1,21 +1,23 @@
 import React from "react";
-import Graph from "./Graph7";
-import img1 from "./asset/image2/1.jpg";
-import img2 from "./asset/image2/2.jpg";
-import img3 from "./asset/image2/3.jpg";
-import img4 from "./asset/image/ino.jpg";
-import img5 from "./asset/image/ne.jpg";
-import img6 from "./asset/image/san.jpg";
-import img7 from "./asset/image/tan.jpg";
+import { List } from "antd";
+import Graph from "./graph";
+import img1 from "../../asset/image2/1.jpg";
+import img2 from "../../asset/image2/2.jpg";
+import img3 from "../../asset/image2/3.jpg";
+import img4 from "../../asset/image/ino.jpg";
+import img5 from "../../asset/image/ne.jpg";
+import img6 from "../../asset/image/san.jpg";
+import img7 from "../../asset/image/tan.jpg";
 
-import {eventEmitter} from './Event';
+import { eventEmitter } from "../../utils/Event";
 
-import './App7.css';
+import "./index.css";
+const ListItem = List.Item;
 
-class App extends React.Component {
+class OutSideClick extends React.Component {
     state = {
-      nodes: []
-    }
+        nodes: [],
+    };
     componentDidMount() {
         this.nodes = [
             { id: 1, name: "小孩", src: img1 },
@@ -28,8 +30,8 @@ class App extends React.Component {
         ];
         // 只是为了能在render里使用
         this.setState({
-          nodes: this.nodes
-        })
+            nodes: this.nodes,
+        });
         this.edges = [
             { id: 12, source: 1, target: 2, count: 10 },
             {
@@ -71,7 +73,7 @@ class App extends React.Component {
             },
             {}
         );
-        console.log('zzh didmount this', this);
+        console.log("zzh didmount this", this);
     }
 
     addData = () => {
@@ -93,28 +95,36 @@ class App extends React.Component {
         this.count++;
     };
 
-
     activeNode = (nodeData) => {
-        eventEmitter.emit('active-node',nodeData);
+        eventEmitter.emit("active-node", nodeData);
     };
     render() {
-      console.log('zzh this', this);
         const { activeNode } = this;
         return (
-            <div>
-                <ul>
-                    {this.state.nodes.map((node, index) => {
+            <div id="outside-click-wrapper">
+                <List
+                    id="testList"
+                    itemLayout="horizontal"
+                    dataSource={this.state.nodes}
+                    renderItem={(node, index) => {
                         return (
-                            <li key={String(index)} onClick={() => {activeNode(node)}}>
-                                <img src={node.src} alt="" />
-                            </li>
+                            <ListItem key={String(index)}>
+                                <img
+                                    className="test-image"
+                                    src={node.src}
+                                    alt=""
+                                    onClick={() => {
+                                        activeNode(node);
+                                    }}
+                                />
+                            </ListItem>
                         );
-                    })}
-                </ul>
+                    }}
+                />
                 <div id="container" style={{ width: 1000, height: 600 }}></div>
             </div>
         );
     }
 }
 
-export default App;
+export default OutSideClick;

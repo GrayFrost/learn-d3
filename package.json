@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^4.2.4",
     "d3": "^5.12.0",
     "d3-force-boundary": "0.0.1",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.2.0",
     "vis-network": "^6.3.2"
   },

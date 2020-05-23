@@ -1,9 +1,9 @@
 import React from "react";
 import * as d3 from "d3";
-import tanImg from "./asset/image/tan.jpg";
-import neImg from "./asset/image/ne.jpg";
-import sanImg from "./asset/image/san.jpg";
-import inoImg from "./asset/image/ino.jpg";
+import tanImg from "../../asset/image/tan.jpg";
+import neImg from "../../asset/image/ne.jpg";
+import sanImg from "../../asset/image/san.jpg";
+import inoImg from "../../asset/image/ino.jpg";
 
 class App extends React.Component {
   componentDidMount() {
