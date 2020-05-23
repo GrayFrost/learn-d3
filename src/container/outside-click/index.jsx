@@ -1,13 +1,13 @@
 import React from "react";
 import { List } from "antd";
 import Graph from "./graph";
-import img1 from "../../asset/image2/1.jpg";
-import img2 from "../../asset/image2/2.jpg";
-import img3 from "../../asset/image2/3.jpg";
-import img4 from "../../asset/image/ino.jpg";
-import img5 from "../../asset/image/ne.jpg";
-import img6 from "../../asset/image/san.jpg";
-import img7 from "../../asset/image/tan.jpg";
+import img1 from "../../asset/image/1.jpeg";
+import img2 from "../../asset/image/2.jpeg";
+import img3 from "../../asset/image/3.jpeg";
+import img4 from "../../asset/image/4.jpeg";
+import img5 from "../../asset/image/5.jpeg";
+import img6 from "../../asset/image/6.jpeg";
+import img7 from "../../asset/image/7.jpeg";
 
 import { eventEmitter } from "../../utils/Event";
 
@@ -20,13 +20,13 @@ class OutSideClick extends React.Component {
     };
     componentDidMount() {
         this.nodes = [
-            { id: 1, name: "小孩", src: img1 },
-            { id: 2, name: "保安", src: img3 },
-            { id: 3, name: "女生", src: img2 },
-            { id: 4, name: "伊之助", src: img4 },
-            { id: 5, name: "妹妹", src: img5 },
-            { id: 6, name: "炭治郎", src: img7 },
-            { id: 7, name: "善意", src: img6 },
+            { id: 1, name: "龙马", src: img1 },
+            { id: 2, name: "海棠", src: img2 },
+            { id: 3, name: "乾", src: img3 },
+            { id: 4, name: "菊丸", src: img4 },
+            { id: 5, name: "不二", src: img5 },
+            { id: 6, name: "手冢", src: img6 },
+            { id: 7, name: "幸村", src: img7 },
         ];
         // 只是为了能在render里使用
         this.setState({

@@ -1,9 +1,9 @@
 import React from "react";
 import Graph from "./graph";
 import { Button } from "antd";
-import img1 from "../../asset/image2/1.jpg";
-import img2 from "../../asset/image2/2.jpg";
-import img3 from "../../asset/image2/3.jpg";
+import img1 from "../../asset/image/1.jpeg";
+import img2 from "../../asset/image/2.jpeg";
+import img3 from "../../asset/image/3.jpeg";
 import svg1 from "../../asset/svg/icon-huji.svg";
 import svg2 from "../../asset/svg/icon-wz.svg";
 

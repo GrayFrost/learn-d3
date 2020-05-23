@@ -1,9 +1,9 @@
 import React from "react";
 import * as d3 from "d3";
 import { Button } from "antd";
-import img1 from "../../asset/image2/1.jpg";
-import img2 from "../../asset/image2/2.jpg";
-import img3 from "../../asset/image2/3.jpg";
+import img1 from "../../asset/image/4.jpeg";
+import img2 from "../../asset/image/5.jpeg";
+import img3 from "../../asset/image/6.jpeg";
 
 class MyGraph {
     w = 1000;

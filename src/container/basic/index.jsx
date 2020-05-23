@@ -1,23 +1,23 @@
 import React from "react";
 import * as d3 from "d3";
-import tanImg from "../../asset/image/tan.jpg";
-import neImg from "../../asset/image/ne.jpg";
-import sanImg from "../../asset/image/san.jpg";
-import inoImg from "../../asset/image/ino.jpg";
+import img1 from "../../asset/image/1.jpeg";
+import img2 from "../../asset/image/2.jpeg";
+import img3 from "../../asset/image/3.jpeg";
+import img4 from "../../asset/image/4.jpeg";
 
 class App extends React.Component {
   componentDidMount() {
     const nodes = [
-      { id: 1, name: "炭治郎", src: tanImg },
-      { id: 2, name: "祢豆子", src: neImg },
-      { id: 3, name: "善逸", src: sanImg },
-      { id: 4, name: "猪猪", src: inoImg }
+      { id: 1, name: "龙马", src: img1 },
+      { id: 2, name: "海棠", src: img2 },
+      { id: 3, name: "乾", src: img3 },
+      { id: 4, name: "菊丸", src: img4 }
     ];
     const edges = [
-      { id: 1, source: 1, target: 2, tag: "哥哥" },
-      { id: 2, source: 1, target: 3, tag: "伙伴" },
-      { id: 3, source: 1, target: 4, tag: "伙伴" },
-      { id: 4, source: 2, target: 1, tag: "妹妹" }
+      { id: 1, source: 1, target: 2, tag: "关系一" },
+      { id: 2, source: 1, target: 3, tag: "关系二" },
+      { id: 3, source: 1, target: 4, tag: "关系三" },
+      { id: 4, source: 2, target: 1, tag: "关系四" }
     ];
 
     var linkedByIndex = {};

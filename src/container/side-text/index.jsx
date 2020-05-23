@@ -1,9 +1,9 @@
 import React from "react";
 import Graph from "./graph";
 import { Button } from "antd";
-import img1 from "../../asset/image2/1.jpg";
-import img2 from "../../asset/image2/2.jpg";
-import img3 from "../../asset/image2/3.jpg";
+import img1 from "../../asset/image/5.jpeg";
+import img2 from "../../asset/image/6.jpeg";
+import img3 from "../../asset/image/7.jpeg";
 
 class SideText extends React.Component {
     count = 2;
@@ -12,10 +12,10 @@ class SideText extends React.Component {
         this.nodes = [
             {
                 id: 1,
-                name: "小孩",
+                name: "人物一",
                 src: img1,
             },
-            { id: 2, name: "保安", src: img3 },
+            { id: 2, name: "人物二", src: img3 },
         ];
         this.edges = [
             { id: 1, source: 1, target: 2, count: 10 },
@@ -34,7 +34,7 @@ class SideText extends React.Component {
     addData = () => {
         this.nodes.push({
             id: this.count + 1,
-            name: "女孩",
+            name: "人物哈哈哈",
             src: img2,
         });
         this.edges.push({
