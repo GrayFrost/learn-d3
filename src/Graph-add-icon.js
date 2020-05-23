@@ -115,7 +115,7 @@ class Graph {
       gCircle.append('image')
       .attr('xlink:href', d => {
         return d.src;
-      }).attr('class', 'img')
+      }).attr('class', 'imageCircle')
       .attr("x", -this.opts.radius)
       .attr("y", -this.opts.radius)
       .attr("width", this.opts.radius * 2)
@@ -305,7 +305,6 @@ class Graph {
     let text = this.gEdgeTextLayer.selectAll("text.edgeText");
     text
       .attr("x", d => {
-        console.log('zzh text d', d);
         return _this.getDis(d.source, d.target) / 2;
       })
       .attr("dy", d => {
